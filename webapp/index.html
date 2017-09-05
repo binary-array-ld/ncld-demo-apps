@@ -9,11 +9,12 @@
     <script src="lib/d3/d3.v3.min.js"></script>
     <script src="lib/d3sparql.js"></script>
     <script>
+    var endpoint = 'http://waterinformatics-ext1-cdc.it.csiro.au/fuseki1/ncld/query'
+    var baseuri = 'http://waterinformatics-ext1-cdc.it.csiro.au/ncld'
     var query_ncld = function () {
       //var endpoint = d3.select("#endpoint").property("value")
-      var endpoint = 'http://localhost:3030/ncld/query'
       //var sparql = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX bald:  <http://binary-array-ld.net/latest/> SELECT * WHERE { ?container a bald:Container .  ?container bald:contains ?contained .  ?contained a bald:Array }'
-      var sparql = ' PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX bald:  <http://binary-array-ld.net/latest/> SELECT ?container ?contained ?containerName ?containedlabel WHERE { ?container a bald:Container .  ?container bald:contains ?contained .  ?contained a bald:Array .  ?contained <http://localhost:3030/ncld/long_name> ?containedlabel BIND( str(?container) as ?containerName) } '
+      var sparql = ' PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX bald:  <http://binary-array-ld.net/latest/> SELECT ?container ?contained ?containerName ?containedlabel WHERE { ?container a bald:Container .  ?container bald:contains ?contained .  ?contained a bald:Array .  ?contained <'+baseuri+'/long_name> ?containedlabel BIND( str(?container) as ?containerName) } '
 
       d3sparql.query(endpoint, sparql, render)
     }
@@ -21,7 +22,7 @@
     function node_clicked(d) {
 		console.log(d.key)
 	    	//$('#selected').text(json)
-      		var endpoint = 'http://localhost:3030/ncld/query'
+      		//var endpoint = 'http://localhost:3030/ncld/query'
 		var sparql = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX bald:  <http://binary-array-ld.net/latest/> SELECT ?prop ?val WHERE { <' + d.key + '> ?prop ?val }'
               	d3sparql.query(endpoint, sparql, render_selected)
     }
