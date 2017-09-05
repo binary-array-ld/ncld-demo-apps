@@ -1,0 +1,26 @@
+version: "3"
+services:
+  web:
+    image: httpd:2.4
+    ports:
+      - "8088:80"
+    volumes:
+      - "./webapp:/usr/local/apache2/htdocs/"
+    networks:
+      - webnet
+
+  fuseki:
+    image: stain/jena-fuseki
+    ports:
+      - "3030:3030"
+    environment:
+      - ADMIN_PASSWORD=abc123
+    volumes:
+      - "/opt/data/fuseki:/fuseki"
+      - "./rdf:/staging"
+    networks:
+      - webnet
+
+
+networks:
+  webnet:
