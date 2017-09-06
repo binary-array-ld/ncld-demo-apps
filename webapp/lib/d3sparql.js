@@ -285,7 +285,7 @@ d3sparql.htmltable = function(json, config) {
     })
     .enter()
     .append("td")
-    .html(function(val) { 
+    .html(function(val, i) { 
 	    var pattern = /^((http|https|ftp):\/\/)/;
 	    if(pattern.test(val)) {
                 return "<a href=" + val + ">" +val+"</a>"

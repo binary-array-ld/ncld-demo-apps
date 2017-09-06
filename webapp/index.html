@@ -9,13 +9,23 @@
     <link href="lib/bootstrap/css/bootstrap.css" rel="stylesheet">
     <script src="lib/d3/d3.v3.min.js"></script>
     <script src="lib/d3sparql.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+        integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+	   crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+   integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+   crossorigin=""></script>
+
     <script>
-    var endpoint = 'http://waterinformatics-ext1-cdc.it.csiro.au/fuseki1/ncld/query'
-    var baseuri = 'http://waterinformatics-ext1-cdc.it.csiro.au/ncld'
+    //var endpoint = 'http://waterinformatics-ext1-cdc.it.csiro.au/fuseki1/ncld/query'
+    //var baseuri = 'http://waterinformatics-ext1-cdc.it.csiro.au/ncld'
+    var endpoint = 'http://localhost:3030/ncld/query'
     var query_ncld = function () {
       //var endpoint = d3.select("#endpoint").property("value")
       //var sparql = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX bald:  <http://binary-array-ld.net/latest/> SELECT * WHERE { ?container a bald:Container .  ?container bald:contains ?contained .  ?contained a bald:Array }'
-      var sparql = ' PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX bald:  <http://binary-array-ld.net/latest/> SELECT ?container ?contained ?containerName ?containedlabel WHERE { ?container a bald:Container .  ?container bald:contains ?contained .  ?contained a bald:Array .  ?contained <'+baseuri+'/long_name> ?containedlabel BIND( str(?container) as ?containerName) } '
+	    var sparql = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX bald:  <http://binary-array-ld.net/latest/> PREFIX cf: <http://def.scitools.org.uk/CFTerms/> SELECT ?container ?contained ?containerName ?containedlabel WHERE { ?container a bald:Container .  ?container bald:contains ?contained .  ?contained a bald:Array .  { ?contained cf:long_name ?containedlabel } UNION { ?contained ?lnprop ?containedlabel FILTER(regex(str(?lnprop), "long_name", "i")) } BIND( str(?container) as ?containerName) }'
+					      
 
       d3sparql.query(endpoint, sparql, render)
     }
@@ -72,6 +82,7 @@
 	      <div class="col-md-6" id="result">
 	      </div>
 	      <div class="col-md-4" id="selected">
+                    <div>
 	      </div>
       </div>
   </body>
