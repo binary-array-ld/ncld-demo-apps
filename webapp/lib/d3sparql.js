@@ -802,9 +802,16 @@ d3sparql.forcegraph = function(json, config, clickfn) {
     "selector":  config.selector  || null
   }
 
+  //var svg = d3sparql.select(opts.selector, "forcegraph").append("svg")
+  //  .attr("width", opts.width)
+  //  .attr("height", opts.height)
+
+
   var svg = d3sparql.select(opts.selector, "forcegraph").append("svg")
-    .attr("width", opts.width)
-    .attr("height", opts.height)
+  //  .attr("width", opts.width)
+  //  .attr("height", opts.height)
+	.attr("width", "100%")
+	.attr("height", "100%")
   var link = svg.selectAll(".link")
     .data(graph.links)
     .enter()
@@ -854,6 +861,21 @@ d3sparql.forcegraph = function(json, config, clickfn) {
     "font-size": "8px",
     "font-family": "sans-serif",
   })
+
+  var zoom = d3.behavior.zoom()
+	    .scaleExtent([1, 5])
+	    .on("zoom", function() {
+		          var e = d3.event,
+			          tx = Math.min(0, Math.max(e.translate[0]))
+		          ty = Math.min(0, Math.max(e.translate[1]));
+		          zoom.translate([tx, ty]);
+		          svg.selectAll("*:not(g)").attr("transform", [
+				          "translate(" + [tx, ty] + ")",
+				          "scale(" + e.scale + ")"
+				        ].join(" "));
+		      });
+	
+  svg.call(zoom)
 }
 
 /*
